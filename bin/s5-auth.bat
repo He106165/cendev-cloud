@@ -1,0 +1,1 @@
+start "cendev-auth" cmd /c %~dp0\start-what-service auth

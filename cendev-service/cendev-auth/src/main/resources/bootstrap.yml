@@ -1,0 +1,48 @@
+server:
+  port: 8005
+# 日志配置
+logging:
+  level:
+    com.censoft: debug
+    org.springframework: warn  
+spring:
+  application:
+    name: cendev-auth
+   # 资源信息
+  messages:
+    # 国际化资源文件路径
+    basename: i18n/messages
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  cloud:
+    config:
+      fail-fast: true
+      name: ${spring.application.name}
+      profile: ${spring.profiles.active}
+      discovery:
+        enabled: true
+        service-id: cendev-config
+  profiles: 
+    active: dev
+  main:
+    allow-bean-definition-overriding: true
+  
+feign: 
+  hystrix: 
+    enabled: true
+
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url:
+      #defaultZone: http://eureka.cloud.xg.com:7001/eureka
+      defaultZone: http://192.168.4.198:7001/eureka/,http://192.168.4.201:7002/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true     #访问路径可以显示IP地址     
+# 暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

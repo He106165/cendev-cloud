@@ -1,0 +1,1 @@
+start "cendev-system" cmd /c %~dp0\start-what-service system

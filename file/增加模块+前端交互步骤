@@ -1,0 +1,16 @@
+1. 利用系统自带的代码生成工具，选择数据库里要生成的表，生成代码包（注意修改generator.yml 文件中的包路径）
+2. 在cendev-cloud-app/ cendev-app下 新建一个项目： 右键 new module  选择Spring init...
+3. 模仿cendev-backmanage项目修改以下步骤
+    1)修改启动类文件注解头
+    2)增加durid.yml、redis.yml文件，修改appliaction.yml文件【修改项目名称、端口号】
+    3)配置中心修改【可以不修改，用自己模块里的配置文件】
+    4)网关修改
+    5）cendev-app的pom文件 修改
+    6)将代码包粘贴进来，会有一些错误，自行解决
+    6)进入mapper.xml文件中，insert方法加入对应ID,impl文件中 setID(IdUtil.fastSimpleUUID());
+4.启动，后端步骤完成
+5.将前端代码包粘贴到 ant项目中
+6.将增删改查按钮菜单sql执行一下（注意父级菜单id）,添加权限
+7.修改路由(请求地址到页面之间的映射)
+8.页面中方法可能存在大小写不对应、路劲错误等问题 ，自行修改
+

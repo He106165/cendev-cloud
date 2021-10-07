@@ -1,0 +1,1 @@
+start "cendev-dfs" cmd /c %~dp0\start-what-service dfs

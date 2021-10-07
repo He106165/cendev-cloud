@@ -1,0 +1,162 @@
+server:
+  port: 9527
+
+spring:
+  application:
+    name: cendev-gateway
+  devtools:
+    restart:
+      enabled: true
+  profiles:
+    active: dev
+    include: redis
+  cloud:
+    config:
+      fail-fast: true
+      name: ${spring.application.name}
+      profile: ${spring.profiles.active}
+      discovery:
+        enabled: true
+        service-id: cendev-config
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        # 认证中心
+        - id: cendev-auth
+          uri: lb://cendev-auth
+          predicates:
+            - Path=/auth/**
+          filters:
+            # 验证码处理
+            - CacheRequest
+            - ImgCodeFilter
+            - StripPrefix=1
+        # 代码生成
+        - id: cendev-gen
+          uri: lb://cendev-gen
+          predicates:
+            - Path=/gen/**
+          filters:
+            - StripPrefix=1
+        # dfs
+        - id: cendev-dfs
+          uri: lb://cendev-dfs
+          predicates:
+            - Path=/dfs/**
+          filters:
+            - StripPrefix=1
+        #后台管理
+        - id: cendev-backmanage
+          uri: lb://cendev-backmanage
+          predicates:
+            - Path=/backmanage/**
+          filters:
+            - StripPrefix=1
+        #其他方式登录模块
+        - id: cendev-otherlogin
+          uri: lb://cendev-otherlogin
+          predicates:
+            - Path=/otherlogin/**
+          filters:
+            - StripPrefix=1
+        #微信登录模块
+        - id: cendev-wechat
+          uri: lb://cendev-wechat
+          predicates:
+            - Path=/wechat/**
+          filters:
+            - StripPrefix=1
+        # 个人中心模块
+        - id: cendev-personalcenter
+          uri: lb://cendev-personalcenter
+          predicates:
+            - Path=/personalcenter/**
+          filters:
+            - StripPrefix=1
+        # 个人用户登陆
+        - id: cendev-personallogin
+          uri: lb://cendev-personallogin
+          predicates:
+            - Path=/personallogin/**
+          filters:
+            - StripPrefix=1
+        # 用户注册
+        - id: cendev-userRegister
+          uri: lb://cendev-userRegister
+          predicates:
+            - Path=/userRegister/**
+          filters:
+            - StripPrefix=1
+        #消息发送模块
+        - id: cendev-magsend
+          uri: lb://cendev-magsend
+          predicates:
+            - Path=/magsend/**
+          filters:
+            - StripPrefix=1
+        #对外接口服务
+        - id: cendev-exInterface
+          uri: lb://cendev-exInterface
+          predicates:
+            - Path=/exInterface/**
+          filters:
+            - StripPrefix=1
+        # demo用户在线onlineUser
+        - id: cendev-onlineuser
+          uri: lb://cendev-onlineuser
+          predicates:
+            - Path=/onlineUser/**
+          filters:
+            - StripPrefix=1
+        # demo用户在线onlineUser
+        - id: cendev-test
+          uri: lb://cendev-test
+          predicates:
+          - Path=/test/**
+          filters:
+          - StripPrefix=1
+        #system 模块
+        - id: cendev-system
+          uri: lb://cendev-system
+          predicates:
+            - Path=/system/**
+          filters:
+            # 限流配置
+            - StripPrefix=1
+            - name: RequestRateLimiter
+              args:
+                key-resolver: '#{@remoteAddrKeyResolver}'
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+              # 降级配置
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: 'forward:/fallback'
+
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url:
+      #defaultZone: http://eureka.cloud.xg.com:7001/eureka
+      defaultZone: http://192.168.4.198:7001/eureka/,http://192.168.4.201:7002/eureka/
+  instance:
+    instance-id:  ${spring.application.name}:${server.port}
+    prefer-ip-address: true     #访问路径可以显示IP地址
+
+hystrix:
+    command:
+      default:  #default全局有效，service id指定应用有效
+        execution:
+          timeout:
+            enabled: true
+          isolation:
+            thread:
+              timeoutInMilliseconds: 5000 #断路器超时时间，默认1000ms
+# 暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

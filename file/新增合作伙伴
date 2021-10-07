@@ -1,0 +1,5 @@
+1. 建表，代码生成对应模块
+2. OperatorType 前后台 这个类里新增该合作伙伴的枚举
+2. CALogin 方法 增加 该合作伙伴登陆方法
+3. SysMenuServiceImpl位置修改
+4. LoginUserHandlerResolver 位置修改

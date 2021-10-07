@@ -1,4 +1,4 @@
-## 平台简介
+# 平台简介
 ### 平台架构
 ![Image text](http://git.censoft.com.cn/cendev-cloud/cendev-cloud/raw/master/doc/censoft-cloud.png)
 ### 文档 http://doc.censoft.com.cn

@@ -1,0 +1,1 @@
+start "cendev-gen" cmd /c %~dp0\start-what-service gen

@@ -1,0 +1,1 @@
+start "cendev-eureka" cmd /c %~dp0\start-what eureka

@@ -1,0 +1,5 @@
+ 错误如下：
+ No fallbackFactory instance of type class com.censoft.msgSend.feign.factory.RemoteMagSendFallbackFactory
+ found for feign client cendev-magsend
+
+ 解决方式： 把启动类放到com.censoft 二级包下

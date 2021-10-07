@@ -1,0 +1,40 @@
+server:
+  port: 5001
+  
+spring:
+  application:
+    name: cendev-monitor
+  profiles:
+    active: dev
+  #配置中心
+  cloud:
+    config:
+      fail-fast: true
+      name: ${spring.application.name}
+      profile: ${spring.profiles.active}
+      discovery:
+        enabled: true
+        service-id: cendev-config
+        
+# 注册中心配置
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url:
+      #defaultZone: http://eureka.cloud.xg.com:7001/eureka
+      defaultZone: http://192.168.4.198:7001/eureka/,http://192.168.4.201:7002/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true     #访问路径可以显示IP地址   
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    metadata-map:
+      user.name: ${spring.security.user.name}
+      user.password: ${spring.security.user.password}
+
+# 暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'      
+        
